@@ -1,0 +1,5 @@
+{
+  "name": "Celo Token Streaming",
+  "description": "A decentralized application for streaming ERC20 tokens on the Celo network. Users can create continuous payment streams to recipients, who can withdraw their vested funds at any time.",
+  "requestFramePermissions": []
+}
