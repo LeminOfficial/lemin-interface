@@ -1,16 +1,16 @@
-import * as React from "react"
-import { format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
+import * as React from 'react';
+import { format } from 'date-fns';
+import { Calendar as CalendarIcon } from 'lucide-react';
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import { cn } from '@/utils/utils';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { Input } from "@/components/ui/input"
+} from '@/components/ui/popover';
+import { Input } from '@/components/ui/input';
 
 interface DatePickerProps {
   value: string; // ISO string for datetime-local
@@ -34,10 +34,10 @@ export function DatePicker({
   helperText,
 }: DatePickerProps) {
   const [date, setDate] = React.useState<Date | undefined>(
-    value ? new Date(value.split('T')[0]) : undefined
+    value ? new Date(value.split('T')[0]) : undefined,
   );
   const [time, setTime] = React.useState<string>(
-    value ? value.split('T')[1] || '00:00' : '00:00'
+    value ? value.split('T')[1] || '00:00' : '00:00',
   );
 
   React.useEffect(() => {
@@ -79,16 +79,14 @@ export function DatePicker({
           <Button
             variant="outline"
             className={cn(
-              "w-full justify-start text-left font-normal",
-              !date && "text-muted-foreground",
-              error && "border-destructive"
+              'w-full justify-start text-left font-normal',
+              !date && 'text-muted-foreground',
+              error && 'border-destructive',
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {date ? format(date, "PPP") : <span>Pick a date</span>}
-            {time && time !== '00:00' && (
-              <span className="ml-2">{time}</span>
-            )}
+            {date ? format(date, 'PPP') : <span>Pick a date</span>}
+            {time && time !== '00:00' && <span className="ml-2">{time}</span>}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
@@ -104,7 +102,10 @@ export function DatePicker({
             initialFocus
           />
           <div className="p-3 border-t">
-            <label htmlFor="time-input" className="block text-sm font-medium mb-2">
+            <label
+              htmlFor="time-input"
+              className="block text-sm font-medium mb-2"
+            >
               Time
             </label>
             <Input
@@ -117,13 +118,10 @@ export function DatePicker({
           </div>
         </PopoverContent>
       </Popover>
-      {error && (
-        <p className="mt-2 text-sm text-destructive">{error}</p>
-      )}
+      {error && <p className="mt-2 text-sm text-destructive">{error}</p>}
       {helperText && !error && (
         <p className="mt-2 text-sm text-muted-foreground">{helperText}</p>
       )}
     </div>
   );
 }
-

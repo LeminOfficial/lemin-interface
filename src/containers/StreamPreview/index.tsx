@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import { ethers } from 'ethers';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { SummaryItem } from './SummaryItem';
-import { StreamStatus } from './StreamStatus';
-import { StreamAmount } from './StreamAmount';
-import { StreamButton } from './StreamButton';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { SummaryItem } from '@/components/SummaryItem';
+import { StreamStatus } from '../../components/stream/StreamStatus';
+import { StreamAmount } from '../../components/stream/StreamAmount';
+import { StreamButton } from '../../components/stream/StreamButton';
 
 interface StreamPreviewProps {
   recipient?: string;
@@ -20,7 +20,7 @@ interface StreamPreviewProps {
   getTokenDisplayName?: (token: any) => string;
 }
 
-export const StreamPreview = ({
+const StreamPreview = ({
   recipient,
   amount,
   tokenAddress,
@@ -32,17 +32,29 @@ export const StreamPreview = ({
   activeTokens = [],
   network = '',
   getTokenDisplayName,
-}) => {
+}: StreamPreviewProps) => {
   // Compute summary
   const summary = useMemo(() => {
-    if (!recipient || !tokenAddress || !amount || !startDate || !duration || !ethers.isAddress(recipient)) {
+    if (
+      !recipient ||
+      !tokenAddress ||
+      !amount ||
+      !startDate ||
+      !duration ||
+      !ethers.isAddress(recipient)
+    ) {
       return null;
     }
 
     const parsedAmount = parseFloat(amount);
     const parsedDuration = parseInt(duration, 10);
 
-    if (isNaN(parsedAmount) || parsedAmount <= 0 || isNaN(parsedDuration) || parsedDuration <= 0) {
+    if (
+      isNaN(parsedAmount) ||
+      parsedAmount <= 0 ||
+      isNaN(parsedDuration) ||
+      parsedDuration <= 0
+    ) {
       return null;
     }
 
@@ -57,11 +69,16 @@ export const StreamPreview = ({
       stopDate.setMonth(stopDate.getMonth() + parsedDuration);
     }
 
-    const totalSeconds = (stopDate.getTime() - parsedStartDate.getTime()) / 1000;
+    const totalSeconds =
+      (stopDate.getTime() - parsedStartDate.getTime()) / 1000;
     const ratePerSecond = totalSeconds > 0 ? parsedAmount / totalSeconds : 0;
-    const selectedToken = activeTokens.find((t: any) => t.address === tokenAddress);
-    
-    const displayName = getTokenDisplayName ? getTokenDisplayName(selectedToken) : selectedToken?.name || '';
+    const selectedToken = activeTokens.find(
+      (t: any) => t.address === tokenAddress,
+    );
+
+    const displayName = getTokenDisplayName
+      ? getTokenDisplayName(selectedToken)
+      : selectedToken?.name || '';
 
     return {
       recipient,
@@ -71,10 +88,21 @@ export const StreamPreview = ({
       stopDate: stopDate.toLocaleString(),
       rate: `${ratePerSecond.toPrecision(6)} ${displayName || 'tokens'}/sec`,
     };
-  }, [recipient, amount, tokenAddress, startDate, duration, durationUnit, activeTokens, getTokenDisplayName]);
+  }, [
+    recipient,
+    amount,
+    tokenAddress,
+    startDate,
+    duration,
+    durationUnit,
+    activeTokens,
+    getTokenDisplayName,
+  ]);
 
   const isValid = !!summary;
-  const tokenName = summary?.tokenName || (activeTokens.length > 0 ? activeTokens[0].name : 'CELO');
+  const tokenName =
+    summary?.tokenName ||
+    (activeTokens.length > 0 ? activeTokens[0].name : 'CELO');
   const displayStartDate = summary?.startDate;
   const displayStopDate = summary?.stopDate;
   const displayRate = summary?.rate;
@@ -121,7 +149,12 @@ export const StreamPreview = ({
       type: 'date' as const,
       show: !!displayStopDate,
     },
-    { label: 'Flow Rate', value: displayRate, type: 'rate' as const, show: !!displayRate },
+    {
+      label: 'Flow Rate',
+      value: displayRate,
+      type: 'rate' as const,
+      show: !!displayRate,
+    },
   ];
 
   const summaryItems = allItems.filter((item) => item.show);
@@ -202,3 +235,5 @@ export const StreamPreview = ({
     </div>
   );
 };
+
+export default StreamPreview;

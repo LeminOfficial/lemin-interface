@@ -6,7 +6,7 @@ import { ManageStreamsPage } from './pages/ManageStreamsPage';
 import { StreamDetailPage } from './pages/StreamDetailPage';
 import { CeloProvider } from './hooks/useCelo';
 import { ThemeProvider } from './hooks/useTheme';
-import { Notification } from './components/common';
+import { Notification } from './components/Notification';
 import type { NotificationState } from './types';
 
 function App() {
@@ -16,13 +16,17 @@ function App() {
     type: 'success',
   });
 
-  const showNotification = (message: string, type: 'success' | 'error', duration: number = 5000) => {
+  const showNotification = (
+    message: string,
+    type: 'success' | 'error',
+    duration: number = 5000,
+  ) => {
     setNotification({ show: true, message, type });
     setTimeout(() => {
       setNotification({ show: false, message: '', type: 'success' });
     }, duration);
   };
-  
+
   return (
     <ThemeProvider>
       <CeloProvider showNotification={showNotification}>
@@ -34,8 +38,8 @@ function App() {
               <Route path="/manage-streams" element={<ManageStreamsPage />} />
               <Route path="/stream/:id" element={<StreamDetailPage />} />
             </Routes>
-            
-            <Notification 
+
+            <Notification
               message={notification.message}
               type={notification.type}
               show={notification.show}

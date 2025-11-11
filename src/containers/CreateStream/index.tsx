@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
-import { useCelo } from '../../hooks/useCelo';
-import { StreamPreview } from '../stream';
-import { LoadingModal, SuccessModal } from '../modals';
-import { DateTimePicker } from '../common';
-import StreamingModelSelector from './StreamingModelSelector';
-import RecipientAddressInput from './RecipientAddressInput';
-import TokenSelector from './TokenSelector';
-import CancellableStreamToggle from './CancellableStreamToggle';
-import DurationInput from './DurationInput';
+import { useCelo } from '@/hooks/useCelo';
+import { LoadingModal, SuccessModal } from '@/components/modals';
+import { DateTimePicker } from '@/components/DatePicker/DateTimePicker';
+import StreamingModelSelector from '@/components/StreamingModelSelector';
+import RecipientAddressInput from '@/components/RecipientAddressInput';
+import TokenSelector from '@/components/TokenSelector';
+import CancellableStreamToggle from '@/components/CancellableStreamToggle';
+import DurationInput from '@/components/DurationInput';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../ui/card';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { Separator } from '../ui/separator';
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import StreamPreview from '@/containers/StreamPreview';
 
 export const CreateStreamForm = () => {
   // Hooks

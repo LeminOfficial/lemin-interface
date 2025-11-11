@@ -1,5 +1,5 @@
-import { Label } from "@/components/ui/label";
-import { AddressInputModal } from "../modals";
+import { Label } from '@/components/ui/label';
+import { AddressInputModal } from '@/components/modals';
 
 interface RecipientAddressInputProps {
   recipient: string;
@@ -25,9 +25,9 @@ export default function RecipientAddressInput({
           onClick={() => setIsAddressModalOpen(true)}
         >
           <span
-            className={recipient ? "text-foreground" : "text-muted-foreground"}
+            className={recipient ? 'text-foreground' : 'text-muted-foreground'}
           >
-            {recipient || "Click to enter recipient address"}
+            {recipient || 'Click to enter recipient address'}
           </span>
           <svg
             className="h-5 w-5 text-muted-foreground"

@@ -1,5 +1,5 @@
 import React from 'react';
-import EthereumIdenticon from '../common/Identicon';
+import EthereumIdenticon from '@/components/identIcon';
 
 interface StreamParticipantProps {
   address: string;
@@ -8,12 +8,12 @@ interface StreamParticipantProps {
   formatAddress: (addr: string) => string;
 }
 
-export const StreamParticipant = ({ 
-  address, 
-  label, 
+export const StreamParticipant = ({
+  address,
+  label,
   diameter = 32,
-  formatAddress 
-}) => {
+  formatAddress,
+}: StreamParticipantProps) => {
   return (
     <div className="flex items-center space-x-2">
       <EthereumIdenticon address={address} diameter={diameter} />

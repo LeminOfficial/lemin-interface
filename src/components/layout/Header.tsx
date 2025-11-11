@@ -1,6 +1,7 @@
 import React from 'react';
-import { NetworkSwitcher, ThemeToggle } from '../common';
-import { LeminLogo } from '../icons';
+import { LeminLogo } from '@/components/icons';
+import NetworkSwitcher from '@/components/NetworkSwitcher';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface HeaderProps {
   setActiveTab: (tab: 'dashboard' | 'create' | 'view') => void;

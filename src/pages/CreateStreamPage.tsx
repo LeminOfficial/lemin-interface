@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout } from '../components/layout';
-import { CreateStreamForm } from '../components/forms';
+import { CreateStreamForm } from '@/containers/CreateStream';
 
 export const CreateStreamPage = () => {
   return (

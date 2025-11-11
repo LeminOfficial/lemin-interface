@@ -1,14 +1,14 @@
 import React from 'react';
-import { useCelo } from '../../hooks/useCelo';
+import { useCelo } from '@/hooks/useCelo';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../ui/card';
-import { Button } from '../ui/button';
-import { LeminLogo } from '../icons';
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { LeminLogo } from '@/components/icons';
 
 interface DashboardProps {
   onNavigate: (tab: 'dashboard' | 'create' | 'view') => void;

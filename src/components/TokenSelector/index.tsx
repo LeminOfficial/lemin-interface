@@ -1,5 +1,5 @@
-import { Label } from "@/components/ui/label";
-import { TokenSelectionModal } from "../modals";
+import { Label } from '@/components/ui/label';
+import { TokenSelectionModal } from '@/components/modals';
 
 interface TokenSelectorProps {
   tokenAddress: string;
@@ -46,14 +46,16 @@ export default function TokenSelector({
             </div>
             <span
               className={
-                tokenAddress ? "text-foreground font-medium" : "text-muted-foreground"
+                tokenAddress
+                  ? 'text-foreground font-medium'
+                  : 'text-muted-foreground'
               }
             >
               {tokenAddress
                 ? getTokenDisplayName(
-                    activeTokens.find((t: any) => t.address === tokenAddress)
-                  ) || "Select token"
-                : "Click to select token"}
+                    activeTokens.find((t: any) => t.address === tokenAddress),
+                  ) || 'Select token'
+                : 'Click to select token'}
             </span>
           </div>
           <svg

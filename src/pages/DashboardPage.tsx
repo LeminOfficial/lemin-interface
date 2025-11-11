@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Layout } from '../components/layout';
-import { Dashboard } from '../components/common';
+import { Dashboard } from '@/containers/Dashboard';
 
 export const DashboardPage = () => {
   const navigate = useNavigate();

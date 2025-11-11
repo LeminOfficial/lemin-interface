@@ -8,7 +8,7 @@ interface StreamAmountDisplayProps {
 export const StreamAmountDisplay = ({
   totalAmount,
   withdrawableAmount,
-}) => {
+}: StreamAmountDisplayProps) => {
   // Function to split amount and token symbol
   const parseAmount = (amountString: string) => {
     const parts = amountString.trim().split(' ');
@@ -29,20 +29,28 @@ export const StreamAmountDisplay = ({
       <div>
         <div className="text-xs text-muted-foreground mb-1">Total</div>
         <div className="flex items-baseline space-x-1">
-          <span className="text-sm font-bold text-foreground">{totalParsed.amount}</span>
-          <span className="text-xs text-muted-foreground">{totalParsed.symbol}</span>
+          <span className="text-sm font-bold text-foreground">
+            {totalParsed.amount}
+          </span>
+          <span className="text-xs text-muted-foreground">
+            {totalParsed.symbol}
+          </span>
         </div>
       </div>
-      
+
       {/* Separator */}
       <div className="w-px h-8 bg-secondary"></div>
-      
+
       {/* Available Amount */}
       <div>
         <div className="text-xs text-muted-foreground mb-1">Available</div>
         <div className="flex items-baseline space-x-1">
-          <span className="text-sm font-bold bw-text-accent">{withdrawableParsed.amount}</span>
-          <span className="text-xs text-muted-foreground">{withdrawableParsed.symbol}</span>
+          <span className="text-sm font-bold bw-text-accent">
+            {withdrawableParsed.amount}
+          </span>
+          <span className="text-xs text-muted-foreground">
+            {withdrawableParsed.symbol}
+          </span>
         </div>
       </div>
     </div>
