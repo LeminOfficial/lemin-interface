@@ -40,12 +40,11 @@ export const LeminLogo = ({ className = 'h-10 w-10' }: LeminLogoProps) => {
         />
 
         {/* Center dot */}
-        {/* <circle cx="20" cy="20" r="3" fill="white" /> */}
+        <circle cx="20" cy="20" r="3" fill="white" />
 
-        {/* Small accent dots for flow animation effect */}
-        {/* <circle cx="12" cy="18" r="1" fill="rgba(255,255,255,0.8)" />
+        <circle cx="12" cy="18" r="1" fill="rgba(255,255,255,0.8)" />
 
-        <circle cx="28" cy="22" r="1" fill="rgba(255,255,255,0.8)" /> */}
+        <circle cx="28" cy="22" r="1" fill="rgba(255,255,255,0.8)" />
       </svg>
     </div>
   );

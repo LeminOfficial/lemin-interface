@@ -152,7 +152,9 @@ export const ManageStreams = () => {
   const counts = getStreamCounts();
 
   if (!isConnected) {
-    return <ConnectWalletPrompt onConnect={connectWallet} loading={loading} />;
+    return (
+      <ConnectWalletPrompt text="Please connect your wallet to manage your streams." />
+    );
   }
 
   return (

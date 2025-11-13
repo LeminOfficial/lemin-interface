@@ -12,6 +12,7 @@ import { formatAmount } from '@/utils/formatAmount';
 import { useCelo } from '@/hooks/useCelo';
 
 import type { StreamDetails } from '../types';
+import { ConnectWalletPrompt } from '@/components/ConnectWalletPrompt';
 
 export const StreamDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -75,24 +76,7 @@ export const StreamDetailPage = () => {
   if (!isConnected) {
     return (
       <Layout>
-        <div className="flex items-center justify-center h-full">
-          <div className="text-center py-24 px-8 bw-card max-w-2xl bw-shadow">
-            <WalletIcon className="h-16 w-16 mx-auto bw-text-accent mb-4" />
-            <h2 className="text-3xl font-semibold mb-3 text-foreground">
-              Connect Your Wallet
-            </h2>
-            <p className="text-muted-foreground mb-8">
-              Please connect your wallet to view stream details.
-            </p>
-            <button
-              onClick={connectWallet}
-              disabled={loading}
-              className="bw-button-primary px-8 py-3"
-            >
-              {loading ? 'Connecting...' : 'Connect Wallet'}
-            </button>
-          </div>
-        </div>
+        <ConnectWalletPrompt text="Please connect your wallet to view stream details." />
       </Layout>
     );
   }
