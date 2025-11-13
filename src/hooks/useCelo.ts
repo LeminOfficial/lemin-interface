@@ -6,13 +6,15 @@ import React, {
   useCallback,
 } from 'react';
 import { ethers } from 'ethers';
+import { toast } from 'sonner';
+
 import {
   CONTRACT_ADDRESS,
   STREAM_CONTRACT_ABI,
   ERC20_ABI,
   NETWORKS,
-} from '../constants';
-import type { StreamDetails, NetworkName, Token, Network } from '../types';
+} from '@/constants';
+import type { StreamDetails, NetworkName, Token, Network } from '@/types';
 
 interface CeloContextType {
   provider: ethers.BrowserProvider | null;
@@ -37,24 +39,22 @@ interface CeloContextType {
   cancelStream: (streamId: string) => Promise<boolean>;
   topUpStream: (streamId: string, amount: bigint) => Promise<boolean>;
   getWithdrawableAmount: (streamId: string) => Promise<bigint>;
-  getUserStreams: (userAddress: string) => Promise<Array<{
-    streamId: string;
-    stream: StreamDetails;
-    type: 'sent' | 'received';
-  }>>;
+  getUserStreams: (userAddress: string) => Promise<
+    Array<{
+      streamId: string;
+      stream: StreamDetails;
+      type: 'sent' | 'received';
+    }>
+  >;
 }
 
 const CeloContext = createContext<CeloContextType | undefined>(undefined);
 
 interface CeloProviderProps {
   children: React.ReactNode;
-  showNotification: (message: string, type: 'success' | 'error') => void;
 }
 
-export const CeloProvider: React.FC<CeloProviderProps> = ({
-  children,
-  showNotification,
-}) => {
+export const CeloProvider: React.FC<CeloProviderProps> = ({ children }) => {
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
   const [signer, setSigner] = useState<ethers.Signer | null>(null);
   const [address, setAddress] = useState<string | null>(null);
@@ -81,7 +81,7 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
   const switchNetwork = async (newNetwork: NetworkName) => {
     const ethereum = getEthereum();
     if (!ethereum) {
-      showNotification('MetaMask not detected.', 'error');
+      toast.error('MetaMask not detected.');
       return;
     }
 
@@ -95,9 +95,8 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
       });
       setNetwork(newNetwork);
       disconnect();
-      showNotification(
+      toast.success(
         `Switched to ${targetNetwork.chainName}. Please reconnect wallet.`,
-        'success',
       );
     } catch (switchError: any) {
       if (switchError.code === 4902) {
@@ -108,21 +107,14 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
           });
           setNetwork(newNetwork);
           disconnect();
-          showNotification(
+          toast.success(
             `Added and switched to ${targetNetwork.chainName}. Please reconnect wallet.`,
-            'success',
           );
         } catch (addError) {
-          showNotification(
-            `Failed to add ${targetNetwork.chainName}.`,
-            'error',
-          );
+          toast.error(`Failed to add ${targetNetwork.chainName}.`);
         }
       } else {
-        showNotification(
-          `Failed to switch to ${targetNetwork.chainName}.`,
-          'error',
-        );
+        toast.error(`Failed to switch to ${targetNetwork.chainName}.`);
       }
     } finally {
       setLoading(false);
@@ -132,7 +124,7 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
   const connectWallet = useCallback(async () => {
     const ethereum = getEthereum();
     if (!ethereum) {
-      showNotification('MetaMask not detected. Please install it.', 'error');
+      toast.error('MetaMask not detected. Please install it.');
       return;
     }
 
@@ -143,10 +135,7 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
 
       const currentNetwork = await web3Provider.getNetwork();
       if (currentNetwork.chainId !== BigInt(activeNetwork.chainId)) {
-        showNotification(
-          `Please switch your wallet to ${activeNetwork.chainName}.`,
-          'error',
-        );
+        toast.error(`Please switch your wallet to ${activeNetwork.chainName}.`);
         setLoading(false);
         return;
       }
@@ -156,21 +145,21 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
       setSigner(newSigner);
       const newAddress = await newSigner.getAddress();
       setAddress(newAddress);
-      showNotification('Wallet connected successfully!', 'success');
+      toast.success('Wallet connected successfully!');
     } catch (error) {
       console.error(error);
-      showNotification('Failed to connect wallet.', 'error');
+      toast.error('Failed to connect wallet.');
     } finally {
       setLoading(false);
     }
-  }, [showNotification, activeNetwork]);
+  }, [activeNetwork]);
 
   useEffect(() => {
     const ethereum = getEthereum();
     const handleAccountsChanged = (accounts: string[]) => {
       if (accounts.length === 0) {
         disconnect();
-        showNotification('Wallet disconnected.', 'success');
+        toast.success('Wallet disconnected.');
       } else {
         connectWallet();
       }
@@ -182,7 +171,7 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
         ethereum.removeListener('accountsChanged', handleAccountsChanged);
       };
     }
-  }, [connectWallet, showNotification]);
+  }, [connectWallet]);
 
   const getStreamContract = useCallback(() => {
     if (!signer) return null;
@@ -217,33 +206,34 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
       const stopTimestamp = Math.floor(stopTime.getTime() / 1000);
 
       if (startTimestamp >= stopTimestamp) {
-        showNotification('Start time must be before stop time.', 'error');
+        toast.error('Start time must be before stop time.');
         setLoading(false);
         return null;
       }
 
       if (startTimestamp < Math.floor(Date.now() / 1000) - 60) {
         // 1 min grace period
-        showNotification('Start time cannot be in the past.', 'error');
+        toast.error('Start time cannot be in the past.');
         setLoading(false);
         return null;
       }
 
       // Check if this is Arc network with native USDC
-      const isArcNative = network === 'arc-testnet' && tokenAddress === 'native';
-      
+      const isArcNative =
+        network === 'arc-testnet' && tokenAddress === 'native';
+
       let createTx;
-      
+
       if (isArcNative) {
         // For Arc native USDC, send value directly with the transaction
-        showNotification('Creating stream with native USDC...', 'success');
+        toast.loading('Creating stream with native USDC...');
         createTx = await streamContract.createStream(
           recipient,
           ethers.ZeroAddress, // Use zero address for native token
           deposit,
           startTimestamp,
           stopTimestamp,
-          { value: deposit } // Send native USDC as value
+          { value: deposit }, // Send native USDC as value
         );
       } else {
         // For ERC20 tokens, use the traditional approve + createStream flow
@@ -251,16 +241,13 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
         if (!erc20Contract) return null;
 
         // Step 1: Approve
-        showNotification('Please approve the token transfer...', 'success');
+        toast.loading('Please approve the token transfer...');
         const approveTx = await erc20Contract.approve(
           CONTRACT_ADDRESS[network],
           deposit,
         );
         await approveTx.wait();
-        showNotification(
-          'Approval successful! Now creating stream...',
-          'success',
-        );
+        toast.success('Approval successful! Now creating stream...');
 
         // Step 2: Create Stream
         createTx = await streamContract.createStream(
@@ -271,7 +258,7 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
           stopTimestamp,
         );
       }
-      
+
       const receipt = await createTx.wait();
 
       const streamIdEvent = receipt.logs
@@ -286,22 +273,18 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
 
       if (streamIdEvent && streamIdEvent.args) {
         const streamId = Number(streamIdEvent.args.streamId);
-        showNotification(
-          `Stream created successfully! ID: ${streamId}`,
-          'success',
-        );
+        toast.success(`Stream created successfully! ID: ${streamId}`);
         return streamId;
       }
-      showNotification('Could not find StreamCreated event.', 'error');
+      toast.error('Could not find StreamCreated event.');
       return null;
     } catch (error: any) {
       console.error(error);
-      showNotification(
+      toast.error(
         error?.reason ||
           error?.data?.message ||
           error.message ||
           'Failed to create stream.',
-        'error',
       );
       return null;
     } finally {
@@ -323,8 +306,9 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
       );
 
       // Check if this is Arc network with native token (zero address)
-      const isArcNative = network === 'arc-testnet' && streamData.token === ethers.ZeroAddress;
-      
+      const isArcNative =
+        network === 'arc-testnet' && streamData.token === ethers.ZeroAddress;
+
       let tokenSymbol: string;
       let tokenDecimals: number;
 
@@ -358,9 +342,8 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
       };
     } catch (error) {
       console.error(error);
-      showNotification(
+      toast.error(
         'Failed to fetch stream details. Make sure the Stream ID is correct.',
-        'error',
       );
       return null;
     } finally {
@@ -376,16 +359,15 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
     try {
       const tx = await streamContract.withdraw(streamId, amount);
       await tx.wait();
-      showNotification('Withdrawal successful!', 'success');
+      toast.success('Withdrawal successful!');
       return true;
     } catch (error: any) {
       console.error(error);
-      showNotification(
+      toast.error(
         error?.reason ||
           error?.data?.message ||
           error.message ||
           'Withdrawal failed.',
-        'error',
       );
       return false;
     } finally {
@@ -401,16 +383,15 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
     try {
       const tx = await streamContract.cancelStream(streamId);
       await tx.wait();
-      showNotification('Stream cancelled successfully!', 'success');
+      toast.success('Stream cancelled successfully!');
       return true;
     } catch (error: any) {
       console.error(error);
-      showNotification(
+      toast.error(
         error?.reason ||
           error?.data?.message ||
           error.message ||
           'Failed to cancel stream.',
-        'error',
       );
       return false;
     } finally {
@@ -426,16 +407,15 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
     try {
       const tx = await streamContract.topUpStream(streamId, amount);
       await tx.wait();
-      showNotification('Stream topped up successfully!', 'success');
+      toast.success('Stream topped up successfully!');
       return true;
     } catch (error: any) {
       console.error(error);
-      showNotification(
+      toast.error(
         error?.reason ||
           error?.data?.message ||
           error.message ||
           'Failed to top up stream.',
-        'error',
       );
       return false;
     } finally {
@@ -467,20 +447,22 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
       try {
         senderStreams = await streamContract.getSenderStreams(userAddress);
       } catch (error: any) {
-        if (error.reason && error.reason.includes("no streams for sender")) {
-          console.log("No sender streams found for user");
+        if (error.reason && error.reason.includes('no streams for sender')) {
+          console.log('No sender streams found for user');
           senderStreams = [];
         } else {
           throw error;
         }
       }
 
-      // Try to get recipient streams, handle "no streams" error  
+      // Try to get recipient streams, handle "no streams" error
       try {
-        recipientStreams = await streamContract.getRecipientStreams(userAddress);
+        recipientStreams = await streamContract.getRecipientStreams(
+          userAddress,
+        );
       } catch (error: any) {
-        if (error.reason && error.reason.includes("no streams for recipient")) {
-          console.log("No recipient streams found for user");
+        if (error.reason && error.reason.includes('no streams for recipient')) {
+          console.log('No recipient streams found for user');
           recipientStreams = [];
         } else {
           throw error;
@@ -493,13 +475,16 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
       for (const streamData of senderStreams) {
         const streamId = streamData.streamId.toString();
         const stream = streamData.stream;
-        
+
         // Get additional data
-        const withdrawableAmount = await streamContract.withdrawableAmount(streamId);
-        
+        const withdrawableAmount = await streamContract.withdrawableAmount(
+          streamId,
+        );
+
         // Check if this is Arc network with native token
-        const isArcNative = network === 'arc-testnet' && stream.token === ethers.ZeroAddress;
-        
+        const isArcNative =
+          network === 'arc-testnet' && stream.token === ethers.ZeroAddress;
+
         let tokenSymbol: string;
         let tokenDecimals: number;
 
@@ -544,13 +529,16 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
       for (const streamData of recipientStreams) {
         const streamId = streamData.streamId.toString();
         const stream = streamData.stream;
-        
+
         // Get additional data
-        const withdrawableAmount = await streamContract.withdrawableAmount(streamId);
-        
+        const withdrawableAmount = await streamContract.withdrawableAmount(
+          streamId,
+        );
+
         // Check if this is Arc network with native token
-        const isArcNative = network === 'arc-testnet' && stream.token === ethers.ZeroAddress;
-        
+        const isArcNative =
+          network === 'arc-testnet' && stream.token === ethers.ZeroAddress;
+
         let tokenSymbol: string;
         let tokenDecimals: number;
 
@@ -592,11 +580,12 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({
       }
 
       // Sort by stream ID (newest first)
-      return allStreams.sort((a, b) => parseInt(b.streamId) - parseInt(a.streamId));
-      
+      return allStreams.sort(
+        (a, b) => parseInt(b.streamId) - parseInt(a.streamId),
+      );
     } catch (error) {
       console.error('Error fetching user streams:', error);
-      showNotification('Failed to fetch streams.', 'error');
+      toast.error('Failed to fetch streams.');
       return [];
     }
   };
