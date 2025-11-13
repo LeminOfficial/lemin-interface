@@ -11,29 +11,6 @@ A modern, intuitive platform for creating and managing continuous payment stream
 - **Cancellable Streams**: Optional stream cancellation
 - **Beautiful UI**: Modern, responsive design with light/dark themes
 
-## Project Structure
-
-```
-lemin-interface/
-├── public/           # Static assets (images, fonts, etc.)
-├── src/             # Source code
-│   ├── abi/         # Contract ABIs
-│   ├── components/  # React components
-│   ├── hooks/       # Custom React hooks
-│   ├── lib/         # Utility libraries
-│   ├── pages/       # Page components
-│   ├── utils/       # Helper functions
-│   ├── App.tsx      # Main app component
-│   ├── index.tsx    # Entry point
-│   ├── index.css    # Global styles
-│   ├── types.ts     # TypeScript types
-│   └── constants.ts # App constants
-├── index.html       # HTML entry point
-├── vite.config.ts   # Vite configuration
-├── tsconfig.json    # TypeScript configuration
-└── tailwind.config.js # Tailwind CSS configuration
-```
-
 ## Run Locally
 
 **Prerequisites:** Node.js
