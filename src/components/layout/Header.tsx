@@ -16,15 +16,15 @@ export const Header = ({ setActiveTab }: HeaderProps) => {
           onClick={() => setActiveTab('dashboard')}
           className="flex items-center space-x-3 hover:opacity-80 transition-opacity"
         >
-          <LeminLogo className="h-10 w-10 text-white" />
-          <span className="text-2xl font-bold text-white">Lemin</span>
+          <LeminLogo className="h-6 w-6 md:h-10 md:w-10 text-white" />
+          <span className="md:text-2xl font-bold text-white">Lemin</span>
         </button>
 
         {/* Right Side Controls */}
         <div className="flex items-center space-x-4">
           <a
             href="#"
-            className="text-white/80 hover:text-white transition-colors text-sm font-medium"
+            className="text-white/80 hover:text-white transition-colors text-sm font-medium hidden md:block"
           >
             Documentation
           </a>
