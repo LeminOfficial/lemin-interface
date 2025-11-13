@@ -53,7 +53,9 @@ export const NetworkSwitcher = () => {
         } text-white`}
       >
         <div className={`w-2 h-2 rounded-full ${currentNetwork.color}`}></div>
-        <span className="text-sm font-medium">{currentNetwork.label}</span>
+        <span className="text-[10px] md:text-sm font-medium">
+          {currentNetwork.label}
+        </span>
         <svg
           className={`w-4 h-4 transition-transform duration-200 ${
             isOpen ? 'rotate-180' : ''
