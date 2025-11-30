@@ -473,116 +473,169 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({ children }) => {
 
       // Process sender streams
       for (const streamData of senderStreams) {
-        const streamId = streamData.streamId.toString();
-        const stream = streamData.stream;
+        try {
+          const streamId = streamData.streamId.toString();
+          const stream = streamData.stream;
 
-        // Get additional data
-        const withdrawableAmount = await streamContract.withdrawableAmount(
-          streamId,
-        );
-
-        // Check if this is Arc network with native token
-        const isArcNative =
-          network === 'arc-testnet' && stream.token === ethers.ZeroAddress;
-
-        let tokenSymbol: string;
-        let tokenDecimals: number;
-
-        if (isArcNative) {
-          tokenSymbol = 'USDC';
-          tokenDecimals = 18;
-        } else {
-          const erc20Contract = getErc20Contract(stream.token);
-          if (erc20Contract) {
-            tokenSymbol = await erc20Contract.symbol();
-            tokenDecimals = await erc20Contract.decimals();
-          } else {
-            tokenSymbol = 'Unknown';
-            tokenDecimals = 18;
+          // Check if stream exists by verifying it has valid data
+          if (!stream.sender || stream.sender === ethers.ZeroAddress) {
+            console.log(`Skipping invalid stream ${streamId}`);
+            continue;
           }
+
+          // Get additional data with error handling
+          let withdrawableAmount = BigInt(0);
+          try {
+            withdrawableAmount = await streamContract.withdrawableAmount(
+              streamId,
+            );
+          } catch (error: any) {
+            console.log(
+              `Stream ${streamId} does not exist or is invalid, skipping`,
+            );
+            continue;
+          }
+
+          // Check if this is Arc network with native token
+          const isArcNative =
+            network === 'arc-testnet' && stream.token === ethers.ZeroAddress;
+
+          let tokenSymbol: string;
+          let tokenDecimals: number;
+
+          if (isArcNative) {
+            tokenSymbol = 'USDC';
+            tokenDecimals = 18;
+          } else {
+            const erc20Contract = getErc20Contract(stream.token);
+            if (erc20Contract) {
+              try {
+                tokenSymbol = await erc20Contract.symbol();
+                tokenDecimals = await erc20Contract.decimals();
+              } catch {
+                tokenSymbol = 'Unknown';
+                tokenDecimals = 18;
+              }
+            } else {
+              tokenSymbol = 'Unknown';
+              tokenDecimals = 18;
+            }
+          }
+
+          const streamDetails: StreamDetails = {
+            id: parseInt(streamId),
+            sender: stream.sender,
+            recipient: stream.recipient,
+            tokenAddress: stream.token,
+            totalAmount: stream.deposit,
+            startTime: stream.startTime,
+            stopTime: stream.stopTime,
+            remainingBalance: BigInt(stream.deposit) - stream.withdrawn,
+            withdrawableAmount,
+            tokenSymbol,
+            tokenDecimals: Number(tokenDecimals),
+            isEntity: true,
+            withdrawn: stream.withdrawn,
+          };
+
+          allStreams.push({
+            streamId,
+            stream: streamDetails,
+            type: 'sent' as const,
+          });
+        } catch (error) {
+          console.log('Error processing sender stream:', error);
+          // Continue to next stream
         }
-
-        const streamDetails: StreamDetails = {
-          id: parseInt(streamId),
-          sender: stream.sender,
-          recipient: stream.recipient,
-          tokenAddress: stream.token,
-          totalAmount: stream.deposit,
-          startTime: stream.startTime,
-          stopTime: stream.stopTime,
-          remainingBalance: BigInt(stream.deposit) - stream.withdrawn,
-          withdrawableAmount,
-          tokenSymbol,
-          tokenDecimals: Number(tokenDecimals),
-          isEntity: true,
-          withdrawn: stream.withdrawn,
-        };
-
-        allStreams.push({
-          streamId,
-          stream: streamDetails,
-          type: 'sent' as const,
-        });
       }
 
       // Process recipient streams
       for (const streamData of recipientStreams) {
-        const streamId = streamData.streamId.toString();
-        const stream = streamData.stream;
+        try {
+          const streamId = streamData.streamId.toString();
+          const stream = streamData.stream;
 
-        // Get additional data
-        const withdrawableAmount = await streamContract.withdrawableAmount(
-          streamId,
-        );
-
-        // Check if this is Arc network with native token
-        const isArcNative =
-          network === 'arc-testnet' && stream.token === ethers.ZeroAddress;
-
-        let tokenSymbol: string;
-        let tokenDecimals: number;
-
-        if (isArcNative) {
-          tokenSymbol = 'USDC';
-          tokenDecimals = 18;
-        } else {
-          const erc20Contract = getErc20Contract(stream.token);
-          if (erc20Contract) {
-            tokenSymbol = await erc20Contract.symbol();
-            tokenDecimals = await erc20Contract.decimals();
-          } else {
-            tokenSymbol = 'Unknown';
-            tokenDecimals = 18;
+          // Check if stream exists by verifying it has valid data
+          if (!stream.sender || stream.sender === ethers.ZeroAddress) {
+            console.log(`Skipping invalid stream ${streamId}`);
+            continue;
           }
+
+          // Get additional data with error handling
+          let withdrawableAmount = BigInt(0);
+          try {
+            withdrawableAmount = await streamContract.withdrawableAmount(
+              streamId,
+            );
+          } catch (error: any) {
+            console.log(
+              `Stream ${streamId} does not exist or is invalid, skipping`,
+            );
+            continue;
+          }
+
+          // Check if this is Arc network with native token
+          const isArcNative =
+            network === 'arc-testnet' && stream.token === ethers.ZeroAddress;
+
+          let tokenSymbol: string;
+          let tokenDecimals: number;
+
+          if (isArcNative) {
+            tokenSymbol = 'USDC';
+            tokenDecimals = 18;
+          } else {
+            const erc20Contract = getErc20Contract(stream.token);
+            if (erc20Contract) {
+              try {
+                tokenSymbol = await erc20Contract.symbol();
+                tokenDecimals = await erc20Contract.decimals();
+              } catch {
+                tokenSymbol = 'Unknown';
+                tokenDecimals = 18;
+              }
+            } else {
+              tokenSymbol = 'Unknown';
+              tokenDecimals = 18;
+            }
+          }
+
+          const streamDetails: StreamDetails = {
+            id: parseInt(streamId),
+            sender: stream.sender,
+            recipient: stream.recipient,
+            tokenAddress: stream.token,
+            totalAmount: stream.deposit,
+            startTime: stream.startTime,
+            stopTime: stream.stopTime,
+            remainingBalance: BigInt(stream.deposit) - stream.withdrawn,
+            withdrawableAmount,
+            tokenSymbol,
+            tokenDecimals: Number(tokenDecimals),
+            isEntity: true,
+            withdrawn: stream.withdrawn,
+          };
+
+          allStreams.push({
+            streamId,
+            stream: streamDetails,
+            type: 'received' as const,
+          });
+        } catch (error) {
+          console.log('Error processing recipient stream:', error);
+          // Continue to next stream
         }
-
-        const streamDetails: StreamDetails = {
-          id: parseInt(streamId),
-          sender: stream.sender,
-          recipient: stream.recipient,
-          tokenAddress: stream.token,
-          totalAmount: stream.deposit,
-          startTime: stream.startTime,
-          stopTime: stream.stopTime,
-          remainingBalance: BigInt(stream.deposit) - stream.withdrawn,
-          withdrawableAmount,
-          tokenSymbol,
-          tokenDecimals: Number(tokenDecimals),
-          isEntity: true,
-          withdrawn: stream.withdrawn,
-        };
-
-        allStreams.push({
-          streamId,
-          stream: streamDetails,
-          type: 'received' as const,
-        });
       }
 
       // Sort by stream ID (newest first)
-      return allStreams.sort(
+      const sortedStreams = allStreams.sort(
         (a, b) => parseInt(b.streamId) - parseInt(a.streamId),
       );
+
+      console.log(
+        `✅ Successfully fetched ${sortedStreams.length} valid streams`,
+      );
+      return sortedStreams;
     } catch (error) {
       console.error('Error fetching user streams:', error);
       toast.error('Failed to fetch streams.');
