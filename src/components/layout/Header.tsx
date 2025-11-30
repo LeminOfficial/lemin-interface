@@ -1,5 +1,3 @@
-import React from 'react';
-import { LeminLogo } from '@/components/icons';
 import NetworkSwitcher from '@/components/NetworkSwitcher';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
@@ -9,14 +7,18 @@ interface HeaderProps {
 
 export const Header = ({ setActiveTab }: HeaderProps) => {
   return (
-    <header className="border-b border-border bw-bg-accent p-6 m-6 mb-0 rounded-lg">
+    <header className="border-b border-border bg-brand-base/90 p-6 m-6 mb-0 rounded-lg">
       <div className="flex items-center justify-between">
         {/* Logo */}
         <button
           onClick={() => setActiveTab('dashboard')}
           className="flex items-center space-x-3 hover:opacity-80 transition-opacity"
         >
-          <LeminLogo className="h-6 w-6 md:h-10 md:w-10 text-white" />
+          <img
+            src="/images/leminLogo.png"
+            alt="Lemin Logo"
+            className="h-6 w-6 md:h-10 md:w-10"
+          />
           <span className="md:text-2xl font-bold text-white">Lemin</span>
         </button>
 

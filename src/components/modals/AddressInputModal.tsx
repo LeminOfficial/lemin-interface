@@ -10,7 +10,13 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, XCircle } from 'lucide-react';
+import {
+  LocationIcon,
+  CloseIcon,
+  CheckCircle2Icon,
+  XCircleIcon,
+  WalletIcon,
+} from '@/components/icons';
 
 interface AddressInputModalProps {
   isOpen: boolean;
@@ -43,37 +49,25 @@ export const AddressInputModal = ({
     }
   };
 
+  const clearInput = () => {
+    setInputAddress('');
+    setTouched(false);
+    setIsValid(false);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[500px] bw-card bw-shadow-md">
         <DialogHeader className="pb-4">
           <div className="flex items-center space-x-3">
-            <div className="p-3 bw-bg-accent rounded-xl">
-              <svg
-                className="h-6 w-6 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
+            <div className="p-3 bg-brand-gray/50 rounded-xl">
+              <WalletIcon />
             </div>
             <div>
               <DialogTitle className="text-xl font-bold text-foreground">
                 Enter Recipient Address
               </DialogTitle>
-              <DialogDescription className="text-muted-foreground mt-1">
+              <DialogDescription className="text-muted-foreground">
                 Enter the recipient's blockchain address to receive the stream
               </DialogDescription>
             </div>
@@ -94,7 +88,7 @@ export const AddressInputModal = ({
                 placeholder="0x1234567890abcdef1234567890abcdef12345678"
                 value={inputAddress}
                 onChange={handleAddressChange}
-                className={`bw-input-large font-mono pr-10 ${
+                className={`bw-input-large pr-10 ${
                   touched && !isValid
                     ? 'border-destructive focus:border-destructive'
                     : ''
@@ -103,26 +97,10 @@ export const AddressInputModal = ({
               {inputAddress && (
                 <button
                   type="button"
-                  onClick={() => {
-                    setInputAddress('');
-                    setTouched(false);
-                    setIsValid(false);
-                  }}
+                  onClick={clearInput}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
+                  <CloseIcon className="h-4 w-4" />
                 </button>
               )}
             </div>
@@ -130,12 +108,12 @@ export const AddressInputModal = ({
               <div className="mt-3">
                 {isValid ? (
                   <div className="flex items-center text-sm bw-text-accent bg-primary/10 p-3 rounded-lg">
-                    <CheckCircle2 className="h-5 w-5 mr-2 flex-shrink-0" />
+                    <CheckCircle2Icon className="h-5 w-5 mr-2 flex-shrink-0" />
                     <span className="font-medium">Valid address format</span>
                   </div>
                 ) : (
                   <div className="flex items-center text-sm text-destructive bg-destructive/10 p-3 rounded-lg">
-                    <XCircle className="h-5 w-5 mr-2 flex-shrink-0" />
+                    <XCircleIcon className="h-5 w-5 mr-2 flex-shrink-0" />
                     <span className="font-medium">
                       Invalid address format. Please check and try again.
                     </span>
@@ -157,9 +135,8 @@ export const AddressInputModal = ({
           <Button
             onClick={handleConfirm}
             disabled={!isValid}
-            className="bw-button-primary bw-interactive"
+            className="bw-button-primary"
           >
-            <CheckCircle2 className="h-4 w-4 mr-2" />
             Confirm Address
           </Button>
         </DialogFooter>

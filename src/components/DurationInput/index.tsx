@@ -1,18 +1,18 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
 interface DurationInputProps {
   duration: string;
-  durationUnit: "days" | "weeks" | "months";
+  durationUnit: 'days' | 'weeks' | 'months';
   setDuration: (value: string) => void;
-  setDurationUnit: (value: "days" | "weeks" | "months") => void;
+  setDurationUnit: (value: 'days' | 'weeks' | 'months') => void;
   handleIntegerInput: (value: string, setter: (val: string) => void) => void;
 }
 
@@ -24,10 +24,8 @@ export default function DurationInput({
   handleIntegerInput,
 }: DurationInputProps) {
   return (
-    <div className="space-y-3">
-      <Label className="text-base font-semibold text-foreground">
-        Stream Duration
-      </Label>
+    <div className="space-y-2">
+      <Label>Stream Duration</Label>
       <div className="flex space-x-3">
         <Input
           type="text"
@@ -39,7 +37,7 @@ export default function DurationInput({
         />
         <Select
           value={durationUnit}
-          onValueChange={(value: "days" | "weeks" | "months") =>
+          onValueChange={(value: 'days' | 'weeks' | 'months') =>
             setDurationUnit(value)
           }
         >

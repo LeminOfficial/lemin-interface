@@ -1,9 +1,6 @@
 // Layout components
 export * from './layout';
 
-// Form components
-export * from './forms';
-
 // Modal components
 export * from './modals';
 
@@ -12,3 +9,8 @@ export * from './stream';
 
 // Icons
 export * from './icons';
+
+// Dashboard components
+export * from './StatCard';
+export * from './StreamIllustration';
+export * from './SummaryItem';

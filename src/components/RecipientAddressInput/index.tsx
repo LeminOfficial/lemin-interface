@@ -17,11 +17,9 @@ export default function RecipientAddressInput({
   return (
     <>
       <div className="space-y-3">
-        <Label className="text-base font-semibold text-foreground">
-          Recipient Address
-        </Label>
+        <Label>Recipient Address</Label>
         <div
-          className="h-[52px] bg-gray-50 dark:bg-gray-900/20 border-2 border-border text-foreground rounded-lg px-4 py-3 transition-all duration-200 hover:border-primary/50 cursor-pointer flex items-center justify-between hover:bg-secondary/50"
+          className="h-[52px] bg-neutral-100 dark:bg-neutral-800/50 text-foreground rounded-brand px-4 py-3 transition-all duration-200 hover:border-primary/50 cursor-pointer flex items-center justify-between hover:bg-secondary/50"
           onClick={() => setIsAddressModalOpen(true)}
         >
           <span

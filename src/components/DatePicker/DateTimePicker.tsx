@@ -66,7 +66,7 @@ export const DateTimePicker = ({
       <PopoverTrigger asChild>
         <button
           className={cn(
-            'w-full h-[52px] justify-between text-left font-normal bg-gray-50 dark:bg-gray-900/20 !border-2 !border-solid !border-input dark:!border-gray-600 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-lg px-4 py-3 transition-all duration-200 shadow-sm hover:border-primary/50 hover:bg-secondary/50 focus:outline-none cursor-pointer flex items-center',
+            'w-full h-[52px] justify-between text-left font-normal bg-neutral-100 dark:bg-neutral-800/50  dark:!border-gray-600 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-brand px-4 py-3 transition-all duration-200 shadow-sm hover:border-primary/50 hover:bg-secondary/50 focus:outline-none cursor-pointer flex items-center',
             !value && 'text-muted-foreground',
             className,
           )}

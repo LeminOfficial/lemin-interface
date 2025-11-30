@@ -45,3 +45,19 @@ export interface Network {
 export type NetworkName = 'celo-mainnet' | 'celo-sepolia' | 'arc-testnet';
 
 export type ChainName = 'celo' | 'arc';
+
+// Stream filtering & sorting types
+export type SortOption =
+  | 'newest'
+  | 'oldest'
+  | 'amount-high'
+  | 'amount-low'
+  | 'progress';
+export type StatusTab = 'all' | 'ongoing' | 'pending' | 'expired';
+export type StreamTypeFilter = 'all' | 'sent' | 'received';
+
+export interface UserStream {
+  streamId: string;
+  stream: StreamDetails;
+  type: 'sent' | 'received';
+}

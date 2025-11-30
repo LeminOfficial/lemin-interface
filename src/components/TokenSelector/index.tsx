@@ -22,10 +22,10 @@ export default function TokenSelector({
 }: TokenSelectorProps) {
   return (
     <>
-      <div className="space-y-3">
-        <Label className="text-base font-semibold text-foreground">Token</Label>
+      <div className="space-y-2">
+        <Label>Token</Label>
         <div
-          className="h-[52px] bg-gray-50 dark:bg-gray-900/20 border-2 border-border text-foreground rounded-lg px-4 py-3 transition-all duration-200 shadow-sm hover:border-primary/50 cursor-pointer flex items-center justify-between hover:bg-secondary/50"
+          className="h-[52px] bg-neutral-100 dark:bg-neutral-800/50 rounded-brand px-4 py-3 transition-all duration-200 shadow-sm hover:border-primary/50 cursor-pointer flex items-center justify-between hover:bg-secondary/50"
           onClick={() => setIsTokenModalOpen(true)}
         >
           <div className="flex items-center space-x-3">
