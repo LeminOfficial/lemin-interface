@@ -19,7 +19,9 @@ export const StreamParticipant = ({
       <EthereumIdenticon address={address} diameter={diameter} />
       <div className="text-xs">
         <div className="text-muted-foreground">{label}</div>
-        <div className="font-mono font-medium">{formatAddress(address)}</div>
+        <div className="text-gray-800 dark:text-gray-200 font-medium">
+          {formatAddress(address)}
+        </div>
       </div>
     </div>
   );

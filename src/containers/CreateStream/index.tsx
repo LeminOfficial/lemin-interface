@@ -209,7 +209,7 @@ export const CreateStreamForm = () => {
                     e.preventDefault();
                     handleSubmit();
                   }}
-                  className="space-y-8"
+                  className="space-y-6"
                 >
                   {/* Streaming Model Selection */}
                   <StreamingModelSelector
@@ -245,10 +245,8 @@ export const CreateStreamForm = () => {
                         />
 
                         {/* Total Amount */}
-                        <div className="space-y-3">
-                          <Label className="text-base font-semibold text-foreground">
-                            Total Amount
-                          </Label>
+                        <div className="space-y-2">
+                          <Label>Total Amount</Label>
                           <Input
                             type="text"
                             value={amount}
@@ -265,10 +263,8 @@ export const CreateStreamForm = () => {
                       {/* Right Column */}
                       <div className="space-y-6">
                         {/* Start Date */}
-                        <div className="space-y-3">
-                          <Label className="text-base font-semibold text-foreground">
-                            Start Date & Time
-                          </Label>
+                        <div className="space-y-2">
+                          <Label>Start Date & Time</Label>
                           <DateTimePicker
                             value={startDate}
                             onChange={setStartDate}
@@ -300,21 +296,19 @@ export const CreateStreamForm = () => {
 
           {/* Preview Section - Fixed */}
           <div className="lg:col-span-2 overflow-hidden">
-            <div className="sticky top-0">
-              <StreamPreview
-                recipient={recipient}
-                amount={amount}
-                tokenAddress={tokenAddress}
-                startDate={startDate}
-                duration={duration}
-                durationUnit={durationUnit}
-                senderAddress={address}
-                cancellable={cancellable}
-                activeTokens={activeTokens}
-                network={network}
-                getTokenDisplayName={getTokenDisplayName}
-              />
-            </div>
+            <StreamPreview
+              recipient={recipient}
+              amount={amount}
+              tokenAddress={tokenAddress}
+              startDate={startDate}
+              duration={duration}
+              durationUnit={durationUnit}
+              senderAddress={address}
+              cancellable={cancellable}
+              activeTokens={activeTokens}
+              network={network}
+              getTokenDisplayName={getTokenDisplayName}
+            />
           </div>
         </div>
       </div>

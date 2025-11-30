@@ -1,13 +1,11 @@
-import React from 'react';
+import { Badge } from '@/components/ui/badge';
 
 interface StreamStatusProps {
   isValid: boolean;
 }
 
 export const StreamStatus = ({ isValid }: StreamStatusProps) => (
-  <span className={`px-2 py-1 rounded text-xs font-medium ${
-    isValid ? "bw-bg-accent text-white" : "bg-secondary text-muted-foreground"
-  }`}>
+  <Badge variant={isValid ? 'ready' : 'incomplete'} size="sm">
     {isValid ? 'Ready' : 'Incomplete'}
-  </span>
+  </Badge>
 );
