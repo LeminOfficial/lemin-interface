@@ -1,8 +1,12 @@
-@import '@fontsource/open-sans/300.css';
-@import '@fontsource/open-sans/400.css';
-@import '@fontsource/open-sans/500.css';
-@import '@fontsource/open-sans/600.css';
-@import '@fontsource/open-sans/700.css';
+@font-face {
+  font-family: 'Google Sans';
+  src: url('/font/GoogleSansFlex-VariableFont_GRAD,ROND,opsz,slnt,wdth,wght.ttf')
+    format('truetype-variations');
+  font-weight: 100 600;
+  font-stretch: 75% 125%;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -21,11 +25,11 @@
     --card-foreground: 0 0% 0%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 0%;
-    
+
     /* Green accent color #3a5a40 */
     --primary: 140 22% 31%;
     --primary-foreground: 0 0% 100%;
-    
+
     /* Light grays for secondary elements */
     --secondary: 0 0% 96%;
     --secondary-foreground: 0 0% 20%;
@@ -33,17 +37,17 @@
     --muted-foreground: 0 0% 45%;
     --accent: 0 0% 96%;
     --accent-foreground: 0 0% 20%;
-    
+
     /* Error states */
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    
+
     /* Borders and inputs */
     --border: 0 0% 90%;
     --input: 0 0% 90%;
     --ring: 140 22% 31%;
     --radius: 0.5rem;
-    
+
     /* Chart colors with green theme */
     --chart-1: 140 22% 31%;
     --chart-2: 0 0% 20%;
@@ -60,11 +64,11 @@
     --card-foreground: 0 0% 100%;
     --popover: 0 0% 5%;
     --popover-foreground: 0 0% 100%;
-    
+
     /* Green accent color #3a5a40 - slightly brighter for dark theme */
     --primary: 140 22% 31%;
     --primary-foreground: 0 0% 100%;
-    
+
     /* Dark grays for secondary elements */
     --secondary: 0 0% 10%;
     --secondary-foreground: 0 0% 90%;
@@ -72,16 +76,16 @@
     --muted-foreground: 0 0% 65%;
     --accent: 0 0% 10%;
     --accent-foreground: 0 0% 90%;
-    
+
     /* Error states */
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 100%;
-    
+
     /* Borders and inputs */
     --border: 0 0% 15%;
     --input: 0 0% 15%;
     --ring: 140 22% 31%;
-    
+
     /* Chart colors with green theme for dark mode */
     --chart-1: 140 22% 31%;
     --chart-2: 0 0% 80%;
@@ -96,10 +100,10 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-sans;
-    font-family: 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+    @apply text-foreground font-sans;
+    font-family: 'Google Sans', ui-sans-serif, system-ui, sans-serif;
   }
-  
+
   /* Remove ALL default focus outlines to prevent double borders */
   *:focus,
   *:focus-visible,
@@ -107,14 +111,14 @@
   input:focus,
   select:focus,
   textarea:focus,
-  [role="button"]:focus,
+  [role='button']:focus,
   [tabindex]:focus {
     outline: none !important;
     box-shadow: none !important;
   }
-  
+
   /* Ensure buttons don't have default browser styling - but not for styled buttons */
-  button:not([class*="bw-button"]):not([class*="border"]):not([class*="bg-"]) {
+  button:not([class*='bw-button']):not([class*='border']):not([class*='bg-']) {
     border: none;
     background: none;
     padding: 0;
@@ -125,6 +129,10 @@
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
+}
+
+.rounded-brand {
+  border-radius: 0.825rem;
 }
 
 ::-webkit-scrollbar-track {
@@ -141,7 +149,7 @@
 
 /* Black and White Design Utilities */
 .bw-card {
-  @apply bg-card border border-border rounded-xl shadow-sm;
+  @apply bg-card border border-border rounded-brand;
 }
 
 .bw-summary-item {
@@ -149,28 +157,28 @@
 }
 
 .bw-input-large {
-  @apply bg-gray-50 border-2 border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-lg px-4 py-3 transition-all duration-200 shadow-sm hover:border-primary/50 text-base h-[52px] focus:outline-none;
+  @apply bg-neutral-100 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-brand px-4 py-3 transition-all duration-200 shadow-sm hover:border-primary/50 text-base h-[52px] focus:outline-none;
 }
 
-.dark .bw-input-large {
+.dark {
   @apply bg-gray-900/20;
 }
 
 .bw-button-primary {
-  @apply bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 rounded-lg px-6 py-3 font-semibold shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary/20;
+  @apply bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 rounded-lg px-6 py-3 shadow-sm  focus:outline-none focus:ring-2 focus:ring-primary/20;
   background-color: hsl(var(--primary)) !important;
   color: hsl(var(--primary-foreground)) !important;
 }
 
 .bw-button-secondary {
-  @apply bg-card text-foreground hover:bg-secondary/80 border-2 border-border hover:border-primary/50 transition-all duration-200 rounded-lg px-6 py-3 font-semibold shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary/20;
+  @apply bg-card text-foreground hover:bg-secondary/10 border-2 border-border hover:border-primary/50 transition-all duration-200 rounded-lg px-6 py-3 font-semibold shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary/20;
   background-color: hsl(var(--card)) !important;
   color: hsl(var(--foreground)) !important;
   border: 2px solid hsl(var(--border)) !important;
 }
 
 .bw-input {
-  @apply bg-gray-50 border-2 border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-lg px-4 py-3 transition-all duration-200 shadow-sm hover:border-primary/50 focus:outline-none;
+  @apply bg-neutral-100 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-lg px-4 py-3 transition-all duration-200 shadow-sm hover:border-primary/50 focus:outline-none;
 }
 
 .dark .bw-input {
@@ -237,12 +245,20 @@
 }
 
 .bw-subtle-pattern {
-  background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0);
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(0, 0, 0, 0.02) 1px,
+    transparent 0
+  );
   background-size: 20px 20px;
 }
 
 .dark .bw-subtle-pattern {
-  background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.02) 1px, transparent 0);
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(255, 255, 255, 0.02) 1px,
+    transparent 0
+  );
 }
 
 /* Interactive elements */
@@ -258,7 +274,12 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(58, 90, 64, 0.1), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(58, 90, 64, 0.1),
+    transparent
+  );
   transition: left 0.5s;
 }
 
@@ -268,7 +289,8 @@
 
 /* Pulse animation for active elements */
 @keyframes bw-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -290,17 +312,15 @@
   @apply focus:outline-none focus:ring-0;
 }
 
-
-
 /* Hide scrollbar while keeping scroll functionality */
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-  display: none;  /* Safari and Chrome */
-}/*
+  display: none; /* Safari and Chrome */
+} /*
  Flow Animation for Stream Visualization */
 @keyframes flow {
   0% {
@@ -317,14 +337,23 @@
   animation: flow 2s linear infinite;
 }
 
-.flow-particle:nth-child(1) { animation-delay: 0s; }
-.flow-particle:nth-child(2) { animation-delay: 0.5s; }
-.flow-particle:nth-child(3) { animation-delay: 1s; }
-.flow-particle:nth-child(4) { animation-delay: 1.5s; }
+.flow-particle:nth-child(1) {
+  animation-delay: 0s;
+}
+.flow-particle:nth-child(2) {
+  animation-delay: 0.5s;
+}
+.flow-particle:nth-child(3) {
+  animation-delay: 1s;
+}
+.flow-particle:nth-child(4) {
+  animation-delay: 1.5s;
+}
 
 /* Pulsing effect for active streams */
 @keyframes stream-pulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
   }
   50% {
@@ -338,11 +367,13 @@
 
 /* Glowing effect for real-time numbers */
 @keyframes number-glow {
-  0%, 100% {
+  0%,
+  100% {
     text-shadow: 0 0 5px rgba(34, 197, 94, 0.3);
   }
   50% {
-    text-shadow: 0 0 20px rgba(34, 197, 94, 0.6), 0 0 30px rgba(34, 197, 94, 0.4);
+    text-shadow: 0 0 20px rgba(34, 197, 94, 0.6),
+      0 0 30px rgba(34, 197, 94, 0.4);
   }
 }
 

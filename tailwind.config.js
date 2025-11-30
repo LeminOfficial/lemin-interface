@@ -1,14 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: ["class"],
-  content: [
-    './index.html',
-    './src/**/*.{js,ts,jsx,tsx}',
-  ],
+  darkMode: ['class'],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Open Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['Google Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -16,6 +13,14 @@ export default {
         sm: 'calc(var(--radius) - 4px)',
       },
       colors: {
+        brand: {
+          base: '#042719', // Color 1: Main Text/Border
+          black: '#000300', // Color 2: Darker Accents
+          gray: '#CCCAC5', // Color 3: Light Gray / Borders
+          dark: '#001D0F', // Color 4: Dark Backgrounds
+          deep: '#0B3022', // Color 5: Secondary Green
+          bg: '#F5F5F4', // Background
+        },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -59,6 +64,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-}
-
+  plugins: [require('tailwindcss-animate')],
+};
