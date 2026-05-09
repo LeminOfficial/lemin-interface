@@ -7,23 +7,23 @@ interface HeaderProps {
 
 export const Header = ({ setActiveTab }: HeaderProps) => {
   return (
-    <header className="border-b border-border bg-brand-base/90 p-6 m-6 mb-0 rounded-lg">
-      <div className="flex items-center justify-between">
+    <header className="bg-brand-base relative after:absolute after:inset-0 after:bg-white/5 after:pointer-events-none">
+      <div className="flex items-center justify-between px-6 py-4">
         {/* Logo */}
         <button
           onClick={() => setActiveTab('dashboard')}
-          className="flex items-center space-x-3 hover:opacity-80 transition-opacity"
+          className="flex items-center gap-3 hover:opacity-80 transition-opacity"
         >
           <img
             src="/images/leminLogo.png"
             alt="Lemin Logo"
-            className="h-6 w-6 md:h-10 md:w-10"
+            className="h-8 w-8"
           />
-          <span className="md:text-2xl font-bold text-white">Lemin</span>
+          <span className="text-xl font-bold text-white">Lemin</span>
         </button>
 
         {/* Right Side Controls */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center gap-4">
           <a
             href="#"
             className="text-white/80 hover:text-white transition-colors text-sm font-medium hidden md:block"
