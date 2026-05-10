@@ -5,13 +5,13 @@ import { DashboardPage } from './pages/DashboardPage';
 import { CreateStreamPage } from './pages/CreateStreamPage';
 import { ManageStreamsPage } from './pages/ManageStreamsPage';
 import { StreamDetailPage } from './pages/StreamDetailPage';
-import { CeloProvider } from './hooks/useCelo';
+import { Web3Provider } from './hooks/useWeb3';
 import { ThemeProvider } from './hooks/useTheme';
 
 function App() {
   return (
     <ThemeProvider>
-      <CeloProvider>
+      <Web3Provider>
         <Router>
           <div className="min-h-screen bg-[#fafafa] dark:bg-neutral-950 transition-colors duration-300">
             <Routes>
@@ -23,7 +23,7 @@ function App() {
           </div>
         </Router>
         <Toaster position="bottom-center" theme="light" expand />
-      </CeloProvider>
+      </Web3Provider>
     </ThemeProvider>
   );
 }
