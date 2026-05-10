@@ -9,7 +9,7 @@ import { StreamProgressBar } from '@/components/ProgressBar';
 import { ExternalLinkIcon, WalletIcon } from '@/components/icons';
 
 import { formatAmount } from '@/utils/formatAmount';
-import { useCelo } from '@/hooks/useCelo';
+import { useWeb3 } from '@/hooks/useWeb3';
 
 import type { StreamDetails } from '../types';
 import { ConnectWalletPrompt } from '@/components/ConnectWalletPrompt';
@@ -27,7 +27,7 @@ export const StreamDetailPage = () => {
     topUpStream,
     connectWallet,
     activeNetwork,
-  } = useCelo();
+  } = useWeb3();
 
   const [streamDetails, setStreamDetails] = useState<StreamDetails | null>(
     null,

@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { useCelo } from '@/hooks/useCelo';
+import { useWeb3 } from '@/hooks/useWeb3';
 import type { NetworkName, ChainName } from '@/types';
 
 export const NetworkSwitcher = () => {
-  const { network, switchNetwork, loading } = useCelo();
+  const { network, switchNetwork, loading } = useWeb3();
   const [isOpen, setIsOpen] = useState(false);
 
   const networks = [

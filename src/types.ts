@@ -42,9 +42,9 @@ export interface Network {
   blockExplorerUrls: string[];
 }
 
-export type NetworkName = 'celo-mainnet' | 'celo-sepolia' | 'arc-testnet';
+export type NetworkName = 'arc-testnet';
 
-export type ChainName = 'celo' | 'arc';
+export type ChainName = 'arc';
 
 // Stream filtering & sorting types
 export type SortOption =

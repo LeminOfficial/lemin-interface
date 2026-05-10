@@ -16,7 +16,7 @@ import {
 } from '@/constants';
 import type { StreamDetails, NetworkName, Token, Network } from '@/types';
 
-interface CeloContextType {
+interface Web3ContextType {
   provider: ethers.BrowserProvider | null;
   signer: ethers.Signer | null;
   address: string | null;
@@ -48,18 +48,18 @@ interface CeloContextType {
   >;
 }
 
-const CeloContext = createContext<CeloContextType | undefined>(undefined);
+const Web3Context = createContext<Web3ContextType | undefined>(undefined);
 
-interface CeloProviderProps {
+interface Web3ProviderProps {
   children: React.ReactNode;
 }
 
-export const CeloProvider: React.FC<CeloProviderProps> = ({ children }) => {
+export const Web3Provider: React.FC<Web3ProviderProps> = ({ children }) => {
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
   const [signer, setSigner] = useState<ethers.Signer | null>(null);
   const [address, setAddress] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [network, setNetwork] = useState<NetworkName>('celo-sepolia');
+  const [network, setNetwork] = useState<NetworkName>('arc-testnet');
 
   const isConnected = !!(provider && signer && address);
   const activeNetwork = NETWORKS[network].config;
@@ -212,35 +212,27 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({ children }) => {
       }
 
       if (startTimestamp < Math.floor(Date.now() / 1000) - 60) {
-        // 1 min grace period
         toast.error('Start time cannot be in the past.');
         setLoading(false);
         return null;
       }
 
-      // Check if this is Arc network with native USDC
-      const isArcNative =
-        network === 'arc-testnet' && tokenAddress === 'native';
-
-      let createTx;
+      const isArcNative = tokenAddress === 'native';
+      let createTx: any;
 
       if (isArcNative) {
-        // For Arc native USDC, send value directly with the transaction
-        toast.loading('Creating stream with native USDC...');
         createTx = await streamContract.createStream(
           recipient,
-          ethers.ZeroAddress, // Use zero address for native token
+          ethers.ZeroAddress,
           deposit,
           startTimestamp,
           stopTimestamp,
-          { value: deposit }, // Send native USDC as value
+          { value: deposit },
         );
       } else {
-        // For ERC20 tokens, use the traditional approve + createStream flow
         const erc20Contract = getErc20Contract(tokenAddress);
         if (!erc20Contract) return null;
 
-        // Step 1: Approve
         toast.loading('Please approve the token transfer...');
         const approveTx = await erc20Contract.approve(
           CONTRACT_ADDRESS[network],
@@ -249,7 +241,6 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({ children }) => {
         await approveTx.wait();
         toast.success('Approval successful! Now creating stream...');
 
-        // Step 2: Create Stream
         createTx = await streamContract.createStream(
           recipient,
           tokenAddress,
@@ -301,26 +292,19 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({ children }) => {
     setLoading(true);
     try {
       const streamData = await streamContract.getStream(streamId);
-      const withdrawableAmount = await streamContract.withdrawableAmount(
-        streamId,
-      );
+      const withdrawableAmount = await streamContract.withdrawableAmount(streamId);
 
-      // Check if this is Arc network with native token (zero address)
-      const isArcNative =
-        network === 'arc-testnet' && streamData.token === ethers.ZeroAddress;
+      const isArcNative = streamData.token === ethers.ZeroAddress;
 
       let tokenSymbol: string;
       let tokenDecimals: number;
 
       if (isArcNative) {
-        // For Arc native USDC
         tokenSymbol = 'USDC';
         tokenDecimals = 18;
       } else {
-        // For ERC20 tokens
         const erc20Contract = getErc20Contract(streamData.token);
         if (!erc20Contract) return null;
-
         tokenSymbol = await erc20Contract.symbol();
         tokenDecimals = await erc20Contract.decimals();
       }
@@ -342,9 +326,7 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({ children }) => {
       };
     } catch (error) {
       console.error(error);
-      toast.error(
-        'Failed to fetch stream details. Make sure the Stream ID is correct.',
-      );
+      toast.error('Failed to fetch stream details. Make sure the Stream ID is correct.');
       return null;
     } finally {
       setLoading(false);
@@ -363,12 +345,7 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({ children }) => {
       return true;
     } catch (error: any) {
       console.error(error);
-      toast.error(
-        error?.reason ||
-          error?.data?.message ||
-          error.message ||
-          'Withdrawal failed.',
-      );
+      toast.error(error?.reason || error?.data?.message || error.message || 'Withdrawal failed.');
       return false;
     } finally {
       setLoading(false);
@@ -387,12 +364,7 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({ children }) => {
       return true;
     } catch (error: any) {
       console.error(error);
-      toast.error(
-        error?.reason ||
-          error?.data?.message ||
-          error.message ||
-          'Failed to cancel stream.',
-      );
+      toast.error(error?.reason || error?.data?.message || error.message || 'Failed to cancel stream.');
       return false;
     } finally {
       setLoading(false);
@@ -411,12 +383,7 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({ children }) => {
       return true;
     } catch (error: any) {
       console.error(error);
-      toast.error(
-        error?.reason ||
-          error?.data?.message ||
-          error.message ||
-          'Failed to top up stream.',
-      );
+      toast.error(error?.reason || error?.data?.message || error.message || 'Failed to top up stream.');
       return false;
     } finally {
       setLoading(false);
@@ -443,26 +410,20 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({ children }) => {
       let senderStreams = [];
       let recipientStreams = [];
 
-      // Try to get sender streams, handle "no streams" error
       try {
         senderStreams = await streamContract.getSenderStreams(userAddress);
       } catch (error: any) {
         if (error.reason && error.reason.includes('no streams for sender')) {
-          console.log('No sender streams found for user');
           senderStreams = [];
         } else {
           throw error;
         }
       }
 
-      // Try to get recipient streams, handle "no streams" error
       try {
-        recipientStreams = await streamContract.getRecipientStreams(
-          userAddress,
-        );
+        recipientStreams = await streamContract.getRecipientStreams(userAddress);
       } catch (error: any) {
         if (error.reason && error.reason.includes('no streams for recipient')) {
-          console.log('No recipient streams found for user');
           recipientStreams = [];
         } else {
           throw error;
@@ -471,35 +432,22 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({ children }) => {
 
       const allStreams = [];
 
-      // Process sender streams
-      for (const streamData of senderStreams) {
+      for (const streamData of [...senderStreams, ...recipientStreams]) {
         try {
           const streamId = streamData.streamId.toString();
           const stream = streamData.stream;
+          const isSent = senderStreams.includes(streamData);
 
-          // Check if stream exists by verifying it has valid data
-          if (!stream.sender || stream.sender === ethers.ZeroAddress) {
-            console.log(`Skipping invalid stream ${streamId}`);
-            continue;
-          }
+          if (!stream.sender || stream.sender === ethers.ZeroAddress) continue;
 
-          // Get additional data with error handling
           let withdrawableAmount = BigInt(0);
           try {
-            withdrawableAmount = await streamContract.withdrawableAmount(
-              streamId,
-            );
-          } catch (error: any) {
-            console.log(
-              `Stream ${streamId} does not exist or is invalid, skipping`,
-            );
+            withdrawableAmount = await streamContract.withdrawableAmount(streamId);
+          } catch {
             continue;
           }
 
-          // Check if this is Arc network with native token
-          const isArcNative =
-            network === 'arc-testnet' && stream.token === ethers.ZeroAddress;
-
+          const isArcNative = stream.token === ethers.ZeroAddress;
           let tokenSymbol: string;
           let tokenDecimals: number;
 
@@ -522,119 +470,35 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({ children }) => {
             }
           }
 
-          const streamDetails: StreamDetails = {
-            id: parseInt(streamId),
-            sender: stream.sender,
-            recipient: stream.recipient,
-            tokenAddress: stream.token,
-            totalAmount: stream.deposit,
-            startTime: stream.startTime,
-            stopTime: stream.stopTime,
-            remainingBalance: BigInt(stream.deposit) - stream.withdrawn,
-            withdrawableAmount,
-            tokenSymbol,
-            tokenDecimals: Number(tokenDecimals),
-            isEntity: true,
-            withdrawn: stream.withdrawn,
-          };
-
           allStreams.push({
             streamId,
-            stream: streamDetails,
-            type: 'sent' as const,
+            stream: {
+              id: parseInt(streamId),
+              sender: stream.sender,
+              recipient: stream.recipient,
+              tokenAddress: stream.token,
+              totalAmount: stream.deposit,
+              startTime: stream.startTime,
+              stopTime: stream.stopTime,
+              remainingBalance: BigInt(stream.deposit) - stream.withdrawn,
+              withdrawableAmount,
+              tokenSymbol,
+              tokenDecimals: Number(tokenDecimals),
+              isEntity: true,
+              withdrawn: stream.withdrawn,
+            } as StreamDetails,
+            type: isSent ? ('sent' as const) : ('received' as const),
           });
         } catch (error) {
-          console.log('Error processing sender stream:', error);
-          // Continue to next stream
+          console.log('Error processing stream:', error);
         }
       }
 
-      // Process recipient streams
-      for (const streamData of recipientStreams) {
-        try {
-          const streamId = streamData.streamId.toString();
-          const stream = streamData.stream;
-
-          // Check if stream exists by verifying it has valid data
-          if (!stream.sender || stream.sender === ethers.ZeroAddress) {
-            console.log(`Skipping invalid stream ${streamId}`);
-            continue;
-          }
-
-          // Get additional data with error handling
-          let withdrawableAmount = BigInt(0);
-          try {
-            withdrawableAmount = await streamContract.withdrawableAmount(
-              streamId,
-            );
-          } catch (error: any) {
-            console.log(
-              `Stream ${streamId} does not exist or is invalid, skipping`,
-            );
-            continue;
-          }
-
-          // Check if this is Arc network with native token
-          const isArcNative =
-            network === 'arc-testnet' && stream.token === ethers.ZeroAddress;
-
-          let tokenSymbol: string;
-          let tokenDecimals: number;
-
-          if (isArcNative) {
-            tokenSymbol = 'USDC';
-            tokenDecimals = 18;
-          } else {
-            const erc20Contract = getErc20Contract(stream.token);
-            if (erc20Contract) {
-              try {
-                tokenSymbol = await erc20Contract.symbol();
-                tokenDecimals = await erc20Contract.decimals();
-              } catch {
-                tokenSymbol = 'Unknown';
-                tokenDecimals = 18;
-              }
-            } else {
-              tokenSymbol = 'Unknown';
-              tokenDecimals = 18;
-            }
-          }
-
-          const streamDetails: StreamDetails = {
-            id: parseInt(streamId),
-            sender: stream.sender,
-            recipient: stream.recipient,
-            tokenAddress: stream.token,
-            totalAmount: stream.deposit,
-            startTime: stream.startTime,
-            stopTime: stream.stopTime,
-            remainingBalance: BigInt(stream.deposit) - stream.withdrawn,
-            withdrawableAmount,
-            tokenSymbol,
-            tokenDecimals: Number(tokenDecimals),
-            isEntity: true,
-            withdrawn: stream.withdrawn,
-          };
-
-          allStreams.push({
-            streamId,
-            stream: streamDetails,
-            type: 'received' as const,
-          });
-        } catch (error) {
-          console.log('Error processing recipient stream:', error);
-          // Continue to next stream
-        }
-      }
-
-      // Sort by stream ID (newest first)
       const sortedStreams = allStreams.sort(
         (a, b) => parseInt(b.streamId) - parseInt(a.streamId),
       );
 
-      console.log(
-        `✅ Successfully fetched ${sortedStreams.length} valid streams`,
-      );
+      console.log(`✅ Successfully fetched ${sortedStreams.length} valid streams`);
       return sortedStreams;
     } catch (error) {
       console.error('Error fetching user streams:', error);
@@ -663,13 +527,13 @@ export const CeloProvider: React.FC<CeloProviderProps> = ({ children }) => {
     getUserStreams,
   };
 
-  return React.createElement(CeloContext.Provider, { value }, children);
+  return React.createElement(Web3Context.Provider, { value }, children);
 };
 
-export const useCelo = () => {
-  const context = useContext(CeloContext);
+export const useWeb3 = () => {
+  const context = useContext(Web3Context);
   if (context === undefined) {
-    throw new Error('useCelo must be used within a CeloProvider');
+    throw new Error('useWeb3 must be used within a Web3Provider');
   }
   return context;
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
-import { useCelo } from '@/hooks/useCelo';
+import { useWeb3 } from '@/hooks/useWeb3';
 import { LoadingModal, SuccessModal } from '@/components/modals';
 import { DateTimePicker } from '@/components/DatePicker/DateTimePicker';
 import StreamingModelSelector from '@/components/StreamingModelSelector';
@@ -32,7 +32,7 @@ export const CreateStreamForm = () => {
     activeTokens,
     address,
     network,
-  } = useCelo();
+  } = useWeb3();
 
   // Form State
   const [recipient, setRecipient] = useState('');

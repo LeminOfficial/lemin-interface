@@ -1,4 +1,4 @@
-import { useCelo } from '@/hooks/useCelo';
+import { useWeb3 } from '@/hooks/useWeb3';
 import { StatCard, StreamIllustration } from '@/components';
 
 interface DashboardProps {
@@ -13,7 +13,7 @@ const mockStreams = [
 ];
 
 export const Dashboard = ({ onNavigate }: DashboardProps) => {
-  const { isConnected, address, connectWallet, loading } = useCelo();
+  const { isConnected, address, connectWallet, loading } = useWeb3();
 
   const truncateAddress = (addr: string) =>
     `${addr.slice(0, 6)}...${addr.slice(-4)}`;

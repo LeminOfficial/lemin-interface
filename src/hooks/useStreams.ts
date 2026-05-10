@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { useCelo } from './useCelo';
+import { useWeb3 } from './useWeb3';
 import type {
   StreamDetails,
   UserStream,
@@ -29,7 +29,7 @@ export const getStreamStatus = (stream: StreamDetails) => {
 };
 
 export const useStreams = () => {
-  const { isConnected, address, getUserStreams } = useCelo();
+  const { isConnected, address, getUserStreams } = useWeb3();
 
   const [streams, setStreams] = useState<UserStream[]>([]);
   const [isLoading, setIsLoading] = useState(false);

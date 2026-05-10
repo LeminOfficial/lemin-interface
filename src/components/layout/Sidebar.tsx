@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useCelo } from '@/hooks/useCelo';
+import { useWeb3 } from '@/hooks/useWeb3';
 import {
   CreateStreamIcon,
   ViewStreamIcon,
@@ -49,7 +49,7 @@ export const Sidebar = ({
     [],
   );
 
-  const { isConnected, loading, connectWallet } = useCelo();
+  const { isConnected, loading, connectWallet } = useWeb3();
 
   if (compact) {
     return (

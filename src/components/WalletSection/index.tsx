@@ -1,11 +1,11 @@
-import { useCelo } from '@/hooks/useCelo';
+import { useWeb3 } from '@/hooks/useWeb3';
 import { WalletIcon } from '@/components/icons';
 
 const truncateAddress = (addr: string) =>
   `${addr.slice(0, 6)}...${addr.slice(-4)}`;
 
 export const WalletSection = () => {
-  const { address, isConnected, loading, connectWallet } = useCelo();
+  const { address, isConnected, loading, connectWallet } = useWeb3();
 
   if (isConnected && address) {
     return (
