@@ -74,9 +74,7 @@ export const Sidebar = ({
                 `}
               >
                 <Icon className="w-5 h-5" />
-                {active && (
-                  <span className="absolute -right-1 top-1/2 -translate-y-1/2 w-1 h-5 bg-brand-base rounded-full" />
-                )}
+               
               </button>
             );
           })}
@@ -123,14 +121,14 @@ export const Sidebar = ({
         <span className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider">
           Navigation
         </span>
-        {onToggle && (
+        {/* {onToggle && (
           <button
             onClick={onToggle}
             className="w-7 h-7 rounded-lg flex items-center justify-center text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/50 transition-colors"
           >
             <CollapseIcon className="w-3.5 h-3.5" />
           </button>
-        )}
+        )} */}
       </div>
 
       {/* Navigation */}
