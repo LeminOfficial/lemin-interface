@@ -64,8 +64,7 @@ export const ManageStreams = () => {
 
   return (
     <div
-      className="w-full py-6 px-4 bw-card mt-2 mx-auto"
-      style={{ height: 'calc(100vh - 9rem)' }}
+      className="w-full py-6 px-4 bw-card sm:h-full mt-2 mx-auto xl:!h-[calc(100vh-6rem)]"
     >
       <div className="space-y-6">
         <h1 className="text-3xl font-bold text-foreground">Activity History</h1>
