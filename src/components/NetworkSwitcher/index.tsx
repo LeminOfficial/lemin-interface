@@ -8,26 +8,13 @@ export const NetworkSwitcher = () => {
 
   const networks = [
     {
-      name: 'celo-mainnet' as NetworkName,
-      label: 'Celo Mainnet',
-      description: 'Celo Production Network',
-      color: 'bg-green-500',
-      chain: 'celo' as ChainName,
-    },
-    {
-      name: 'celo-sepolia' as NetworkName,
-      label: 'Celo Sepolia',
-      description: 'Celo Test Network',
-      color: 'bg-orange-500',
-      chain: 'celo' as ChainName,
-    },
-    {
       name: 'arc-testnet' as NetworkName,
       label: 'Arc Testnet',
       description: 'Arc Test Network',
       color: 'bg-blue-500',
       chain: 'arc' as ChainName,
     },
+    
   ];
 
   const currentNetwork =
