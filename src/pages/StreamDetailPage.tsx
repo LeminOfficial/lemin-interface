@@ -157,7 +157,11 @@ export const StreamDetailPage = () => {
     <Layout>
       <div className="max-w-4xl mx-auto space-y-6 p-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
+     
+
+        {/* Stream Details Card */}
+        <div className="bw-card p-6 space-y-6 bw-shadow">
+             <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <button
               onClick={() => navigate('/manage-streams')}
@@ -190,9 +194,7 @@ export const StreamDetailPage = () => {
             Active
           </div>
         </div>
-
-        {/* Stream Details Card */}
-        <div className="bw-card p-6 space-y-6 bw-shadow">
+        
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <InfoItem
               label="Sender"
