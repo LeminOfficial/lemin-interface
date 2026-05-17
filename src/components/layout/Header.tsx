@@ -7,19 +7,20 @@ interface HeaderProps {
 
 export const Header = ({ setActiveTab }: HeaderProps) => {
   return (
-    <header className="bg-brand-base relative after:absolute after:inset-0 after:bg-white/5 after:pointer-events-none">
-      <div className="flex items-center justify-between px-6 py-4">
+    <header className="bg-brand-base relative after:absolute after:inset-0 after:bg-white/5 after:pointer-events-none m-4 rounded-xl">
+      <div className="flex items-center justify-between px-6 py-5">
         {/* Logo */}
         <button
           onClick={() => setActiveTab('dashboard')}
           className="flex items-center gap-3 hover:opacity-80 transition-opacity"
         >
           <img
-            src="/images/leminLogo.png"
+            src="/images/leminLogoNew.png"
             alt="Lemin Logo"
-            className="h-8 w-8"
+            draggable={false}
+            className="h-12 w-12 object-contain"
           />
-          <span className="text-xl font-bold text-white">Lemin</span>
+          <span className="text-2xl font-medium text-brand-gray">Lemin</span>
         </button>
 
         {/* Right Side Controls */}
