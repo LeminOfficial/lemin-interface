@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Header } from './Header';
-import { Sidebar } from './Sidebar';
+import { Sidebar, type NavItemId } from './Sidebar';
 import MobileBottomNav from './MobileBottomNav';
 
 interface LayoutProps {
@@ -23,7 +23,7 @@ export const Layout = ({ children }: LayoutProps) => {
     return 'dashboard';
   };
 
-  const handleTabChange = (tab: 'dashboard' | 'create' | 'view') => {
+  const handleTabChange = (tab: NavItemId) => {
     switch (tab) {
       case 'create':
         navigate('/create-stream');
@@ -34,6 +34,9 @@ export const Layout = ({ children }: LayoutProps) => {
       case 'dashboard':
         navigate('/');
         break;
+      case 'vesting':
+      default:
+        break;
     }
   };
 
@@ -42,6 +45,7 @@ export const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a]">
       {/* Header - Full Width */}
+
       <Header setActiveTab={handleTabChange} />
 
       {/* Content Area */}

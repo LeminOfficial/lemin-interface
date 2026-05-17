@@ -7,10 +7,17 @@ import {
   WalletIcon,
   CollapseIcon,
   ExpandIcon,
+  VestingIcon,
+  SettingsIcon,
 } from '../icons';
 import WalletSection from '@/components/WalletSection';
 
-type NavItemId = 'dashboard' | 'create' | 'view';
+export type NavItemId =
+  | 'dashboard'
+  | 'create'
+  | 'view'
+  | 'vesting'
+  | 'settings';
 
 interface SidebarProps {
   activeTab: NavItemId;
@@ -45,6 +52,20 @@ export const Sidebar = ({
         description: 'Track & withdraw',
         icon: ViewStreamIcon,
       },
+      {
+        id: 'vesting' as NavItemId,
+        label: 'Vesting',
+        description: 'Coming soon',
+        icon: VestingIcon,
+        disabled: true,
+      },
+      {
+        id: 'settings' as NavItemId,
+        label: 'Settings',
+        description: 'Coming soon',
+        icon: SettingsIcon,
+        disabled: true,
+      },
     ],
     [],
   );
@@ -59,13 +80,16 @@ export const Sidebar = ({
           {navItems.map((item) => {
             const active = activeTab === item.id;
             const Icon = item.icon;
+            const disabled = item.disabled || false;
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => !disabled && setActiveTab(item.id)}
                 title={item.label}
+                disabled={disabled}
                 className={`
                   relative w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-200
+                  ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
                   ${
                     active
                       ? 'bg-brand-base text-white'
@@ -74,7 +98,6 @@ export const Sidebar = ({
                 `}
               >
                 <Icon className="w-5 h-5" />
-               
               </button>
             );
           })}
@@ -137,13 +160,16 @@ export const Sidebar = ({
           {navItems.map((item) => {
             const active = activeTab === item.id;
             const Icon = item.icon;
+            const disabled = item.disabled || false;
 
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => !disabled && setActiveTab(item.id)}
+                disabled={disabled}
                 className={`
                   group relative w-full rounded-xl transition-all duration-200 overflow-hidden
+                  ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
                   ${
                     active
                       ? 'bg-brand-base'
